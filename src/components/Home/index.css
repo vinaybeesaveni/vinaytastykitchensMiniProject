@@ -1,0 +1,51 @@
+.slick-slider {
+  height: 150px;
+}
+
+.offers-img {
+  height: 180px;
+}
+
+.slick-dots li {
+  margin: 0;
+}
+.slick-dots li button:before {
+  color: #ffffff !important;
+  width: 20px;
+}
+.slick-dots li.slick-active button:before {
+  font-size: 8px;
+}
+.home-content-container {
+  padding: 20px;
+}
+.popular-heading {
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 32px;
+  margin-top: 30px;
+  color: #183b56;
+}
+.home-tag {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 24px;
+  color: #64748b;
+  margin-top: 0;
+}
+.sort-by-container {
+  display: flex;
+  align-items: flex-start;
+}
+.sort-icon {
+  font-size: 20px;
+  margin-top: 2px;
+}
+.select-input {
+  border: none;
+  margin-left: 5px;
+  width: 145px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #475569;
+}

@@ -1,0 +1,28 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px 10px 20px;
+}
+.logo-name-container {
+  display: flex;
+  align-items: center;
+}
+.tasty-kitchens-heading-header {
+  font-family: 'DM Sans';
+  font-style: italic;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 32px;
+  color: #f7931e;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 10px;
+}
+.website-logo-header {
+  width: 35px;
+  height: 35px;
+}
+.menu-icon {
+  font-size: 20px;
+}
