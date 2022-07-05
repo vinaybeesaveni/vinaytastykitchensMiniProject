@@ -1,0 +1,44 @@
+.footer-container {
+  background-color: #0f172a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 35vh;
+}
+.tasty-kitchens-logo-footer {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+.tasty-kitchens-heading-footer {
+  font-style: italic;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 24px;
+  color: #ffffff;
+  margin: 0;
+}
+.footer-logo-container {
+  display: flex;
+  align-items: center;
+}
+.contact-us-para {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 24px;
+  text-align: center;
+  color: #ffffff;
+  max-width: 300px;
+}
+.social-media-icons-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 50%;
+  margin-top: 10px;
+}
+.social-media-icon {
+  color: white;
+  font-size: 25px;
+}

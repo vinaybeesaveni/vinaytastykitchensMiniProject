@@ -1,8 +1,12 @@
 import {Component} from 'react'
+import {Link} from 'react-router-dom'
 import Slider from 'react-slick'
 import Cookies from 'js-cookie'
+import {BsFillStarFill} from 'react-icons/bs'
 import {MdOutlineSort} from 'react-icons/md'
+import {IoIosArrowBack, IoIosArrowForward} from 'react-icons/io'
 import Header from '../Header'
+import Footer from '../Footer'
 import './index.css'
 
 const sortByOptions = [
@@ -18,8 +22,23 @@ const sortByOptions = [
   },
 ]
 
+const apiStatusConstants = {
+  initial: 'INITIAL',
+  success: 'SUCCESS',
+  failure: 'FAILURE',
+  loading: 'LOADING',
+}
+
 class Home extends Component {
-  state = {data: [], show: false}
+  state = {
+    data: [],
+    show: false,
+    offset: 1,
+    restaurantList: [],
+    apiStatus: apiStatusConstants.initial,
+    noOfPages: 1,
+    sortBy: sortByOptions[0].value,
+  }
 
   componentDidMount() {
     this.getCarouselImages()
@@ -49,6 +68,9 @@ class Home extends Component {
   }
 
   getRestaurantList = async () => {
+    this.setState({apiStatus: apiStatusConstants.loading})
+    const {sortBy} = this.state
+    const {offset} = this.state
     const jwtToken = Cookies.get('jwt_token')
     const options = {
       method: 'GET',
@@ -56,14 +78,47 @@ class Home extends Component {
         Authorization: `Bearer ${jwtToken}`,
       },
     }
-    const offset = 0
     const limit = 10
+    const currentOffset = (offset - 1) * limit
     const response = await fetch(
-      `https://apis.ccbp.in/restaurants-list?offset=${offset}&limit=${limit}`,
+      `https://apis.ccbp.in/restaurants-list?offset=${currentOffset}&limit=${limit}&sort_by_rating=${sortBy}`,
       options,
     )
     const data = await response.json()
-    console.log(data)
+    if (response.ok === true) {
+      const {restaurants, total} = data
+      const pages = Math.ceil(total / limit)
+      const updatedData = restaurants.map(each => ({
+        id: each.id,
+        imageUrl: each.image_url,
+        name: each.name,
+        userRating: each.user_rating,
+        menuType: each.menu_type,
+      }))
+      this.setState({
+        restaurantList: updatedData,
+        apiStatus: apiStatusConstants.success,
+        noOfPages: pages,
+      })
+    }
+  }
+
+  onClickingBack = () => {
+    this.setState(
+      prevState => ({offset: prevState.offset - 1}),
+      this.getRestaurantList,
+    )
+  }
+
+  onClickingForward = () => {
+    this.setState(
+      prevState => ({offset: prevState.offset + 1}),
+      this.getRestaurantList,
+    )
+  }
+
+  onSortByChange = event => {
+    this.setState({sortBy: event.target.value}, this.getRestaurantList)
   }
 
   renderCarousel = () => {
@@ -94,8 +149,50 @@ class Home extends Component {
     )
   }
 
+  renderSuccessView = () => {
+    const {restaurantList} = this.state
+    return (
+      <ul className="restaurant-list">
+        {restaurantList.map(each => (
+          <li key={each.name}>
+            <Link to="/" className="restaurant-list-item">
+              <img
+                src={each.imageUrl}
+                alt={each.title}
+                className="restaurant-img"
+              />
+              <div className="restaurant-details-container">
+                <p className="name">{each.name}</p>
+                <p className="menu-type">{each.menuType}</p>
+                <div className="ratings-container">
+                  <BsFillStarFill className="rating-icon" />
+                  <p className="rating">
+                    {each.userRating.rating}
+                    <span className="total-reviews">
+                      ({each.userRating.total_reviews})
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+
+  renderRestaurantListView = () => {
+    const {apiStatus} = this.state
+    switch (apiStatus) {
+      case apiStatusConstants.success:
+        return this.renderSuccessView()
+      default:
+        return null
+    }
+  }
+
   render() {
-    const {show} = this.state
+    const {show, offset, noOfPages, sortBy} = this.state
     return (
       <div>
         <Header />
@@ -108,7 +205,11 @@ class Home extends Component {
           </p>
           <div className="sort-by-container">
             <MdOutlineSort className="sort-icon" />
-            <select className="select-input">
+            <select
+              className="select-input"
+              value={sortBy}
+              onChange={this.onSortByChange}
+            >
               {sortByOptions.map(each => (
                 <option value={each.value} key={each.id}>
                   Sort By {each.displayText}
@@ -116,7 +217,34 @@ class Home extends Component {
               ))}
             </select>
           </div>
+          {this.renderRestaurantListView()}
+          <div className="pagination-container">
+            <button
+              className="back-btn"
+              type="button"
+              disabled={offset === 1}
+              onClick={this.onClickingBack}
+            >
+              <i className="back-arrow">
+                <IoIosArrowBack />
+              </i>
+            </button>
+            <p className="page-number">
+              {offset} of {noOfPages}
+            </p>
+            <button
+              className="back-btn"
+              type="button"
+              disabled={noOfPages === offset}
+              onClick={this.onClickingForward}
+            >
+              <i className="back-arrow">
+                <IoIosArrowForward />
+              </i>
+            </button>
+          </div>
         </div>
+        <Footer />
       </div>
     )
   }

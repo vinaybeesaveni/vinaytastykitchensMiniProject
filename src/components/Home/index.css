@@ -48,4 +48,96 @@
   font-size: 16px;
   font-weight: 500;
   color: #475569;
+  outline: none;
+}
+.restaurant-list {
+  padding: 0;
+  list-style: none;
+}
+.restaurant-img {
+  width: 170px;
+  height: 120px;
+  border-radius: 8px;
+}
+.restaurant-list-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  text-decoration: none;
+}
+.restaurant-details-container {
+  display: flex;
+  flex-direction: column;
+  margin-left: 15px;
+}
+.name {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0.2px;
+  color: #334155;
+  margin: 0;
+}
+.menu-type {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: #334155;
+  color: #64748b;
+  margin-top: 5px;
+}
+.rating-icon {
+  color: #ffcc00;
+}
+.ratings-container {
+  display: flex;
+  align-items: center;
+}
+.rating {
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 18px;
+  color: #1e293b;
+  margin: 0;
+  margin-left: 6px;
+  margin-top: 3px;
+}
+.total-reviews {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  margin: 0;
+  margin-left: 6px;
+  color: #64748b;
+}
+.pagination-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.back-btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.back-arrow {
+  border: 1px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+  margin: 10px;
+  background-color: transparent;
+}
+.page-number {
+  font-family: 'Bree Serif';
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 24px;
+  text-align: center;
+  color: #334155;
+  margin: 7px;
 }
