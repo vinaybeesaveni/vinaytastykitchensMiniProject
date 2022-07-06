@@ -2,6 +2,7 @@ import {Component} from 'react'
 import {Link} from 'react-router-dom'
 import Slider from 'react-slick'
 import Cookies from 'js-cookie'
+import Loader from 'react-loader-spinner'
 import {BsFillStarFill} from 'react-icons/bs'
 import {MdOutlineSort} from 'react-icons/md'
 import {IoIosArrowBack, IoIosArrowForward} from 'react-icons/io'
@@ -15,6 +16,7 @@ const sortByOptions = [
     displayText: 'Highest',
     value: 'Highest',
   },
+  {id: 1, displayText: 'Random', value: ''},
   {
     id: 2,
     displayText: 'Lowest',
@@ -32,12 +34,12 @@ const apiStatusConstants = {
 class Home extends Component {
   state = {
     data: [],
-    show: false,
     offset: 1,
     restaurantList: [],
     apiStatus: apiStatusConstants.initial,
     noOfPages: 1,
     sortBy: sortByOptions[0].value,
+    apiRestaurantStatus: apiStatusConstants.initial,
   }
 
   componentDidMount() {
@@ -46,6 +48,7 @@ class Home extends Component {
   }
 
   getCarouselImages = async () => {
+    this.setState({apiStatus: apiStatusConstants.loading})
     const jwtToken = Cookies.get('jwt_token')
     const options = {
       method: 'GET',
@@ -63,12 +66,12 @@ class Home extends Component {
       const updatedData = offers.map(each => ({
         imageUrl: each.image_url,
       }))
-      this.setState({data: updatedData, show: true})
+      this.setState({data: updatedData, apiStatus: apiStatusConstants.success})
     }
   }
 
   getRestaurantList = async () => {
-    this.setState({apiStatus: apiStatusConstants.loading})
+    this.setState({apiRestaurantStatus: apiStatusConstants.loading})
     const {sortBy} = this.state
     const {offset} = this.state
     const jwtToken = Cookies.get('jwt_token')
@@ -97,7 +100,7 @@ class Home extends Component {
       }))
       this.setState({
         restaurantList: updatedData,
-        apiStatus: apiStatusConstants.success,
+        apiRestaurantStatus: apiStatusConstants.success,
         noOfPages: pages,
       })
     }
@@ -121,7 +124,7 @@ class Home extends Component {
     this.setState({sortBy: event.target.value}, this.getRestaurantList)
   }
 
-  renderCarousel = () => {
+  renderCarouselSuccessView = () => {
     const {data} = this.state
     const settings = {
       dots: true,
@@ -138,10 +141,10 @@ class Home extends Component {
         <Slider {...settings} className="slick-slider">
           {data.map(each => (
             <img
-              key={each.imageUrl}
               src={each.imageUrl}
               alt="offers-img"
               className="offers-img"
+              key={each.imageUrl}
             />
           ))}
         </Slider>
@@ -155,12 +158,17 @@ class Home extends Component {
       <ul className="restaurant-list">
         {restaurantList.map(each => (
           <li key={each.name}>
-            <Link to="/" className="restaurant-list-item">
-              <img
-                src={each.imageUrl}
-                alt={each.title}
-                className="restaurant-img"
-              />
+            <Link
+              to={`/restaurant/${each.id}`}
+              className="restaurant-list-item"
+            >
+              <div className="image-container">
+                <img
+                  src={each.imageUrl}
+                  alt={each.title}
+                  className="restaurant-img"
+                />
+              </div>
               <div className="restaurant-details-container">
                 <p className="name">{each.name}</p>
                 <p className="menu-type">{each.menuType}</p>
@@ -181,22 +189,44 @@ class Home extends Component {
     )
   }
 
+  renderLoadingView = () => (
+    <div className="loader-container">
+      <div className="loader-container" data-testid="loader">
+        <Loader type="ThreeDots" color="black" height="50" width="50" />
+      </div>
+    </div>
+  )
+
   renderRestaurantListView = () => {
+    const {apiRestaurantStatus} = this.state
+    switch (apiRestaurantStatus) {
+      case apiStatusConstants.success:
+        return this.renderSuccessView()
+      case apiStatusConstants.loading:
+        return this.renderLoadingView()
+      default:
+        return null
+    }
+  }
+
+  renderCarousel = () => {
     const {apiStatus} = this.state
     switch (apiStatus) {
       case apiStatusConstants.success:
-        return this.renderSuccessView()
+        return this.renderCarouselSuccessView()
+      case apiStatusConstants.loading:
+        return this.renderLoadingView()
       default:
         return null
     }
   }
 
   render() {
-    const {show, offset, noOfPages, sortBy} = this.state
+    const {offset, noOfPages, sortBy} = this.state
     return (
       <div>
         <Header />
-        {show && this.renderCarousel()}
+        {this.renderCarousel()}
         <div className="home-content-container">
           <h1 className="popular-heading">Popular Restaurants</h1>
           <p className="home-tag">

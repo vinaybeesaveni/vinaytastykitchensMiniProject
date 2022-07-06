@@ -1,0 +1,27 @@
+.loader-container-restaurant {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 90vh;
+}
+.restaurant-details {
+  height: 20vh;
+}
+.restaurant-name {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0.2px;
+  color: #ffffff;
+}
+.location {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  max-width: 300px;
+  color: #ffffff;
+}

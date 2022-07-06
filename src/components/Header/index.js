@@ -1,5 +1,6 @@
 import {Component} from 'react'
-import {Link} from 'react-router-dom'
+import {Link, withRouter} from 'react-router-dom'
+import Cookies from 'js-cookie'
 import {FiMenu} from 'react-icons/fi'
 import {AiFillCloseCircle} from 'react-icons/ai'
 import './index.css'
@@ -11,25 +12,35 @@ class Header extends Component {
     this.setState(prevState => ({showMenu: !prevState.showMenu}))
   }
 
+  onClickingLogout = () => {
+    Cookies.remove('jwt_token')
+    const {history} = this.props
+    history.replace('/login')
+  }
+
   renderMenuList = () => (
     <div className="menu-container">
       <ul className="menu-list">
-        <li>
+        <li key="home">
           <Link to="/">
             <button type="button" className="home-btn">
               Home
             </button>
           </Link>
         </li>
-        <li>
+        <li key="cart">
           <Link to="/cart">
             <button type="button" className="home-btn">
               Cart
             </button>
           </Link>
         </li>
-        <li>
-          <button type="button" className="logout-btn">
+        <li key="logout">
+          <button
+            type="button"
+            className="logout-btn"
+            onClick={this.onClickingLogout}
+          >
             Logout
           </button>
         </li>
@@ -44,11 +55,13 @@ class Header extends Component {
       <>
         <nav className="navbar">
           <div className="logo-name-container">
-            <img
-              src="https://res.cloudinary.com/djdrrmpnu/image/upload/v1657008892/Frame_274-website-logo_wgabhl.png"
-              alt="website logo"
-              className="website-logo-header"
-            />
+            <Link to="/">
+              <img
+                src="https://res.cloudinary.com/djdrrmpnu/image/upload/v1657008892/Frame_274-website-logo_wgabhl.png"
+                alt="website logo"
+                className="website-logo-header"
+              />
+            </Link>
             <h1 className="tasty-kitchens-heading-header">Tasty Kitchens</h1>
           </div>
           <button className="menu-btn" type="button">
@@ -61,4 +74,4 @@ class Header extends Component {
   }
 }
 
-export default Header
+export default withRouter(Header)

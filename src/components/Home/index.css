@@ -4,6 +4,7 @@
 
 .offers-img {
   height: 180px;
+  width: 100%;
 }
 
 .slick-dots li {
@@ -48,11 +49,16 @@
   font-size: 16px;
   font-weight: 500;
   color: #475569;
+  background-color: transparent;
   outline: none;
 }
 .restaurant-list {
   padding: 0;
   list-style: none;
+}
+.image-container {
+  width: 170px;
+  height: 120px;
 }
 .restaurant-img {
   width: 170px;
@@ -140,4 +146,11 @@
   text-align: center;
   color: #334155;
   margin: 7px;
+}
+.loader-container {
+  min-height: 30vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
